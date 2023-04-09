@@ -17,4 +17,3 @@ if(mail($destino, $asunto, $contenido, $headers)){
     echo "Hubo un error al enviar el mensaje.";
   }
 }
-?>
