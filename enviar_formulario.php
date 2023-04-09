@@ -15,6 +15,6 @@ $contenido = "Nombre: " . $nombre . "\nSimbolo: " . $simbolo . "\nBalance: " . $
 
 mail($destino, "Mensaje enviado desde formulario de contacto", $contenido);
 
-echo "Mensaje enviado correctamente.";
+echo ("Mensaje enviado correctamente.");
 
 ?>
