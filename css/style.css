@@ -8,10 +8,10 @@
   --font-primary: 'Poppins', sans-serif;
   --font-secondary: 'Arvo', serif;
   --font-code: 'Roboto', monospace;
-  --bg-color: #00163f;
+  --bg-color: #080808;
   --font-color: #ffffff;
   --btn-bg-color: #ffffff;
-  --accent-color: #be7efe;
+  --accent-color: #0c007a;
   --header-shadow: #000 0px 0px 5px;
 }
 
@@ -22,6 +22,9 @@
 }
 
 body {
+  background-image: url('https://wallpapercave.com/wp/wp2050319.jpg');
+  background-size:auto;
+  background-repeat: no-repeat;
   background-color: var(--bg-color);
   display: flex;
   flex-flow: column;
@@ -31,6 +34,7 @@ body {
 }
 
 .container {
+  
   display: flex;
   flex-direction: column;
   max-width: 960px;
