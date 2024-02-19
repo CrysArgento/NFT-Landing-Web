@@ -190,7 +190,8 @@ section {
  
 }
 .countdown .left-image {
-  position: absolute; /* Establece la posición absoluta para la imagen */
+  position:absolute;
+  z-index: -2; /* Establece la posición absoluta para la imagen */
   height: 350px;
   width: auto;
   left: 0; /* La imagen se posiciona en la esquina izquierda del contenedor */
