@@ -10,8 +10,8 @@
   --font-code: 'Roboto', monospace;
   --bg-color: #080808;
   --font-color: #ffffff;
-  --btn-bg-color: #ffffff;
-  --accent-color: #0c007a;
+  --btn-bg-color: #e2a636;
+  --accent-color: #050505;
   --header-shadow: #000 0px 0px 5px;
 }
 
@@ -22,8 +22,8 @@
 }
 
 body {
-  background-image: url('https://img.freepik.com/vector-premium/fondo-blanco-moderno-abstracto_476151-476.jpg?w=2000');
-  background-size:auto;
+  background-image: url('https://static.metacontinental.com/images/pages/home/intro-bg.jpg');
+  background-size:cover;
   background-repeat: no-repeat;
   background-color: var(--bg-color);
   display: flex;
@@ -46,6 +46,7 @@ body {
 
 header {
   box-shadow: var(--header-shadow);
+  background-color: #201f22;
 }
 
 header .container {
@@ -68,7 +69,6 @@ header .container {
   background: var(--btn-bg-color);
   color: var(--accent-color);
   font-family: var(--font-secondary);
-  font-style: italic;
   font-weight: bold;
   font-size: 1rem;
   text-transform: capitalize;
@@ -87,12 +87,16 @@ header .container {
   border-radius: 5rem;
   margin-left: 2rem;
   border-color: transparent;
+  text-align: center;
 }
 
 .hero-btn {
-  border-radius: 4px;
-  font-size: 1.2rem;
-  padding: 1.5rem 3rem;
+
+  display: inline-block;
+  margin-top: 20px; /* Espacio entre los botones, ajusta según sea necesario */
+  border-radius: 2px;
+
+
 }
 
 /* COUNTDOWN SECTION */
@@ -183,5 +187,14 @@ section {
   .countdown p {
     font-size: 1rem;
   }
+ 
+}
+.countdown .left-image {
+  position: absolute; /* Establece la posición absoluta para la imagen */
+  height: 350px;
+  width: auto;
+  left: 0; /* La imagen se posiciona en la esquina izquierda del contenedor */
+  margin-left: 50px;
+  top: 8; /* La imagen se posiciona en la esquina superior del contenedor */
 }
  
