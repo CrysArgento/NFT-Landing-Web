@@ -10,8 +10,8 @@
   --font-code: 'Roboto', monospace;
   --bg-color: #080808;
   --font-color: #ffffff;
-  --btn-bg-color: #9111a1d5;
-  --accent-color: #fffcfcb9;
+  --btn-bg-color: #06662b77;
+  --accent-color: #fcfffd;
   --header-shadow: #000 0px 0px 5px;
 }
 
@@ -22,7 +22,7 @@
 }
 
 body {
-  background-image: url('https://static.metacontinental.com/images/pages/home/intro-bg.jpg');
+  background-image: url('https://png.pngtree.com/background/20230612/original/pngtree-the-ancient-pyramid-in-the-jungle-picture-image_3175259.jpg');
   background-size:cover;
   background-repeat: no-repeat;
   background-color: var(--bg-color);
